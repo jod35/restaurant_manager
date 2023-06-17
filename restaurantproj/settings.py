@@ -270,3 +270,18 @@ JAZZMIN_SETTINGS = {
     # Add a language dropdown into the admin
     "language_chooser": True,
 }
+LOGGING = {
+     'version':1,
+     'handlers': {
+                 'console': {
+             'level': 'DEBUG',
+             'class': 'logging.StreamHandler',
+         },
+     },
+     'loggers': {
+         'django.db.backends': {
+             'level': 'DEBUG',
+             'handlers': ['console'],
+         },
+     },
+ }
