@@ -17,20 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
-
+from django.conf.urls.static import static
 
 def homepage(request):
     return render(request, 'index.html')
 
 urlpatterns = [
+    path("i18n/", include("django.conf.urls.i18n")),
     path('admin/', admin.site.urls),
     path('', homepage, name='homepage'),
     path('orders/', include("order.urls"), name=''),
     path('menu/', include("menu.urls"), name=''),
     path('delivery/', include("delivery.urls"), name=''),
     path('reservations/', include("reservation.urls"), name=''),
-    
-    path("i18n/", include("django.conf.urls.i18n")),
+    path('auth/',include('auth.urls'))
+  
 
 ]
 

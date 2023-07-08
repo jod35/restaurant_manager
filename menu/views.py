@@ -1,5 +1,9 @@
 from django.shortcuts import render
+from .models import MenuItem
 
-# Create your views here.
+
+
 def menu_items(request):
-    return render(request, 'menu/index.html')
+    menu_items = MenuItem.objects.all()
+    return render(request, 'menu/index.html', {'menu_items': menu_items})
+

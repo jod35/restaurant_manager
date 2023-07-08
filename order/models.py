@@ -5,18 +5,23 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 # Create your models here.
-class Order(models.Model):
+class OrderItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    items = models.ManyToManyField(MenuItem, through='OrderItem')
-    def __repr__(self) -> str:
-        return f"Order by {self.user} at {self.created_at}"
+    item = models.ForeignKey(MenuItem,on_delete=models.CASCADE)
+    phone =models.CharField(max_length=10)
+    quantity = models.IntegerField(default=1)
+    
+    def __str__(self) -> str:
+        return f"{self.item.name} at {self.created_at}"
 
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    created =models.DateTimeField(auto_now_add=True)
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(OrderItem)
+    created_at =models.DateTimeField(auto_now_add=True)
 
-    def __repr__(self) -> str:
-        return F"OrderItem {self.created}"
+
+    def __str__(self) -> str:
+        return F"Order {self.user}"
+
+    

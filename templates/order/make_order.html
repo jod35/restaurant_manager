@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Place Order</h1>
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card">
+          <img src="{{ selected_item.image.url }}" class="card-img-top img-fluid" alt="{{selected_item.name}}">
+          <div class="card-body">
+            <h5 class="card-title">{{ selected_item.name }}</h5>
+            <p class="card-text">Price: {{ selected_item.price }}</p>
+            <form action="{% url 'make_order' item_id=selected_item.id %}" method="post">
+              <!-- Form fields go here -->
+              {% csrf_token %}
+                <input type="hidden" name="menu_item" value="{{ selected_item.id }}">
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" min="1" value="1" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="quantity">Phone Number:</label>
+                  <input type="text" name="phone_number" class="form-control">
+              </div>
+              <button type="submit" class="btn btn-primary">Place Order</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

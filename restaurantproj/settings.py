@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'order',
     'delivery',
     'reservation',
+    'crispy_forms',
+    'crispy_bootstrap4'
 ]
 
 MIDDLEWARE = [
@@ -123,6 +125,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = (BASE_DIR / 'static',)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -269,19 +273,31 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
     # Add a language dropdown into the admin
     "language_chooser": True,
+
 }
-LOGGING = {
-     'version':1,
-     'handlers': {
-                 'console': {
-             'level': 'DEBUG',
-             'class': 'logging.StreamHandler',
-         },
-     },
-     'loggers': {
-         'django.db.backends': {
-             'level': 'DEBUG',
-             'handlers': ['console'],
-         },
-     },
- }
+
+# settings.py
+
+# ...
+
+
+# LOGGING = {
+#      'version':1,
+#      'handlers': {
+#                  'console': {
+#              'level': 'DEBUG',
+#              'class': 'logging.StreamHandler',
+#          },
+#      },
+#      'loggers': {
+#          'django.db.backends': {
+#              'level': 'DEBUG',
+#              'handlers': ['console'],
+#          },
+#      },
+#  }
+
+CRISPY_TEMPLATE_PACK="bootstrap4"
+
+LOGIN_URL = '/auth/login'
+LOGIN_REDIRECT_URL = '/auth/login'

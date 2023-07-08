@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Reports</title>
+</head>
+<body>
+    <h1>Order Reports</h1>
+
+    <h2>Order Data:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Dish Type</th>
+                <th>Order Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.Dish Type }}</td>
+                <td>{{ item.Order Count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Analytics Graph:</h2>
+    <img src="{{ graph_file }}" alt="Order Analytics Graph">
+</body>
+</html>

@@ -4,7 +4,11 @@ from .models import MenuItem
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price')
+    list_display = ('name', 'price', 'image')
     search_fields = ('name',)
+
+
+
+
 
 
