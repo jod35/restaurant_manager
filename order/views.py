@@ -8,6 +8,7 @@ from .models import Order, OrderItem
 from django.shortcuts import render
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
+from django.db.models import Sum
 
 @login_required
 def create_new_order(request):
@@ -34,7 +35,7 @@ def add_order_item(request, item_id):
         try:
             menu_item = MenuItem.objects.get(pk=menu_item_id)
             # Process the order and save it to the database
-            order_item = OrderItem.objects.create(user=user, item=menu_item, quantity=quantity)
+            order_item = OrderItem.objects.create(user=user, item=menu_item, quantity=quantity,phone=phone_number)
 
             order_item.save()
 
@@ -69,10 +70,9 @@ def order_items(request):
 def order_item_detail(request,item_id):
     order = get_object_or_404(Order,id=item_id)
 
-    for item in order.items.all():
-        print(item.item.name)
+    total_price = order.items.all().aggregate(total_price=Sum('item__price'))
 
-    return render(request,'order/order_details.html',{'order':order})
+    return render(request,'order/order_details.html',{'order':order,'total_price':total_price['total_price']})
 
 def confirm_order(request):
     if request.method == 'POST':

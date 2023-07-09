@@ -34,7 +34,7 @@
                     </div>
                   </div>
                 </td>
-                <td class="text-right font-weight-semibold align-middle p-4">{{item.item.price}}</td>
+                <td class="text-right font-weight-semibold align-middle p-4">UGX {{item.item.price}}</td>
                 <td class="align-middle p-4"><input type="text" class="form-control text-center" value="{{item.quantity}}"></td>
                 <td class="text-right font-weight-semibold align-middle p-4">{{item.line_total}}</td>
                 <td class="text-center align-middle px-0"><a href="#" class="shop-tooltip close float-none text-danger" title="" data-original-title="Remove">×</a></td>
@@ -48,17 +48,13 @@
     
         <div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
           <div class="mt-4">
-            <label class="text-muted font-weight-normal">Promocode</label>
-            <input type="text" placeholder="ABC" class="form-control">
+            <!-- <label class="text-muted font-weight-normal">Promocode</label>
+            <input type="text" placeholder="ABC" class="form-control"> -->
           </div>
           <div class="d-flex">
-            <div class="text-right mt-4 mr-5">
-              <label class="text-muted font-weight-normal m-0">Discount</label>
-              <div class="text-large"><strong>$20</strong></div>
-            </div>
             <div class="text-right mt-4">
               <label class="text-muted font-weight-normal m-0">Total price</label>
-              <div class="text-large"><strong>$1164.65</strong></div>
+              <div class="text-large"><strong>{{ total_price }}</strong></div>
             </div>
           </div>
         </div>
