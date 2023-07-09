@@ -1,5 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
-    
+
+{% if orders %}
+<table class="table table-striped table-responsive">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Order</th>
+            <th scope="col">Placed at</th>
+            <th scope="col">Items</th>
+            <th scope="col">Confirmed</th>
+            <th scope="col">Delivery Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        {% for order in orders %}
+        <tr>
+            <td scope="row">{{order.id}}</td>
+            <td><a href="{% url 'order_detail' item_id=order.id%}">{{first_item.item.name}} at {{first_item.item.price}} ... </a></td>   
+            <td>{{ order.created_at }}</td>
+            <td>{{order.items.count}}</td>
+            <td>{{order.confirmed}}</td>
+            <td>{{order.delivered}}</td>
+        </tr>
+        {% endfor %}
+            
+    </tbody>
+</table>
+{% else %}
+  <div class="mt-4">
+    <div class="text-center">
+        <p>No orders yet. <a href="{% url 'menu_items' %}">View Menu</a></p>
+    </div>
+  </div>
+{% endif %}
+
 {% endblock content %}
-    
