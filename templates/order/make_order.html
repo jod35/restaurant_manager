@@ -10,7 +10,7 @@
           <div class="card-body">
             <h5 class="card-title">{{ selected_item.name }}</h5>
             <p class="card-text">Price: {{ selected_item.price }}</p>
-            <form action="{% url 'make_order' item_id=selected_item.id %}" method="post">
+            <form action="{% url 'add_order_item' item_id=selected_item.id %}" method="post">
               <!-- Form fields go here -->
               {% csrf_token %}
                 <input type="hidden" name="menu_item" value="{{ selected_item.id }}">

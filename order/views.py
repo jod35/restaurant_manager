@@ -9,10 +9,20 @@ from django.shortcuts import render
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 
+@login_required
+def create_new_order(request):
+    if request.method == "POST":
+        user = request.user
+        new_order = Order.objects.create(user=user)
+
+        new_order.save()
+        return redirect(reverse('menu_items'))
+    
+    return redirect(reverse('homepage'))
 
 
 @login_required
-def make_order(request, item_id):
+def add_order_item(request, item_id):
     menu_item = get_object_or_404(MenuItem, id=item_id)
 
     if request.method == 'POST': 
@@ -28,15 +38,17 @@ def make_order(request, item_id):
 
             order_item.save()
 
-            order = Order.objects.create(user=user)
+            order = Order.objects.filter(user=request.user).latest('created_at')
 
             order.items.add(order_item)
 
             order.save()
 
-            print("Order created")
+            print("Item added")
 
-            return redirect('order_items')
+            messages.success(request,"Item added successfully")
+
+            return redirect('menu_items')
         except MenuItem.DoesNotExist:
             messages.error(request, "Order not created")
             print("Order not created")
@@ -44,10 +56,23 @@ def make_order(request, item_id):
 
     return render(request, 'order/make_order.html', {'selected_item': menu_item})
 
-
+@login_required
 def order_items(request):
-    return render(request, 'order/order_items.html')
+    orders = Order.objects.all()
+   
+    first_item = orders.first().items.first()
 
+    return render(request, 'order/order_items.html',{'orders':orders,'first_item':first_item})
+
+
+@login_required
+def order_item_detail(request,item_id):
+    order = get_object_or_404(Order,id=item_id)
+
+    for item in order.items.all():
+        print(item.item.name)
+
+    return render(request,'order/order_details.html',{'order':order})
 
 def confirm_order(request):
     if request.method == 'POST':

@@ -2,9 +2,9 @@ from django.db import models
 
 
 CATEGORIES = (
-    ('L','lunch'),
-    ('B','breakfast'),
-    ('D','dinner')
+    ('lunch','lunch'),
+    ('breakfast','breakfast'),
+    ('dinner','dinner')
 )
 
 # Create your models here.
