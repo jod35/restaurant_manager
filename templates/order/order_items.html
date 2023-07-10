@@ -39,7 +39,7 @@
                 ❌
                 {% endif %}
             </td>
-            <td><a href="" class="text-danger">delete</a></td>
+            <td><a href="{% url 'delete_order' order_id=order.id%}" class="text-danger">delete</a></td>
         </tr>
         {% endfor %}
             
