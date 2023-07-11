@@ -28,5 +28,12 @@ class Order(models.Model):
 
     def __str__(self) -> str:
         return F"Order {self.user}"
+    
+    class Meta:
+        ordering = ('-created_at',)
+
+    def grand_total(self):
+        total = 0 
+        
 
     
