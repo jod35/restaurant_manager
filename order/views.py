@@ -8,6 +8,7 @@ from .models import Order, OrderItem
 from django.shortcuts import render
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
+from django.db.models import Sum
 
 @login_required
 def create_new_order(request):
@@ -34,7 +35,7 @@ def add_order_item(request, item_id):
         try:
             menu_item = MenuItem.objects.get(pk=menu_item_id)
             # Process the order and save it to the database
-            order_item = OrderItem.objects.create(user=user, item=menu_item, quantity=quantity)
+            order_item = OrderItem.objects.create(user=user, item=menu_item, quantity=quantity,phone=phone_number)
 
             order_item.save()
 
@@ -69,31 +70,20 @@ def order_items(request):
 def order_item_detail(request,item_id):
     order = get_object_or_404(Order,id=item_id)
 
-    for item in order.items.all():
-        print(item.item.name)
+    total_price = order.items.all().aggregate(total_price=Sum('item__price'))
 
-    return render(request,'order/order_details.html',{'order':order})
+    return render(request,'order/order_details.html',{'order':order,'total_price':total_price['total_price']})
 
-def confirm_order(request):
-    if request.method == 'POST':
-        order_id = request.POST.get('order_id')
+@login_required
+def delete_item_from_order(request,order_id,item_id):
+    order = get_object_or_404(Order, pk=order_id)
+    item = get_object_or_404(OrderItem, pk=item_id)
+    
+    order.items.remove(item)
 
-        try:
-            order = Order.objects.get(id=order_id)
-            # Perform any necessary validation checks
-            # ...
+    return redirect(reverse('order_detail',kwargs={'item_id':item.id}))
 
-            order.is_confirmed = True
-            order.save()
 
-            # Notify the user about the order confirmation
-            # ...
-
-            return redirect('order_confirmation')
-        except Order.DoesNotExist:
-            pass
-
-    return redirect('order_items')
 def generate_report(request):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="order_report.pdf"'
@@ -132,6 +122,5 @@ def generate_report(request):
     p.save()
 
     return response
-
 
 
