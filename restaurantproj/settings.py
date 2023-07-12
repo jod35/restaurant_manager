@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'menu',
     'order',
-    'delivery',
-    'reservation',
+
     'crispy_forms',
     'crispy_bootstrap4'
 ]
