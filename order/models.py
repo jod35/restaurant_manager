@@ -44,7 +44,10 @@ class Order(models.Model):
         ordering = ('-created_at',)
 
     def grand_total(self):
-        total = 0 
-        
+
+        total_price = 0
+        for item in self.items.all():
+            total_price += (item.quantity * item.item.price)
+        return total_price
 
     

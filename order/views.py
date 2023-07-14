@@ -10,7 +10,15 @@ from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 from django.db.models import Sum
 from django.views.generic import UpdateView
+from django.views.decorators.http import require_http_methods
+from dotenv import load_dotenv
+import requests
+import random
+import math
+import os
 
+
+load_dotenv()
 
 @login_required
 def create_new_order(request):
@@ -83,6 +91,60 @@ def delete_item_from_order(request,order_id,item_id):
 
     return redirect(reverse('order_detail',kwargs={'item_id':item.id}))
 
+
+def order_checkout(request, order_id):
+    order = get_object_or_404(Order, id= order_id)
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        amount = order.grand_total()
+        phone = request.POST['phone']
+
+        print(email,amount,phone)
+        return redirect(str(process_payment(name, email, amount, phone)))
+
+    context = {'order': order}
+    return render(request, 'order/order_checkout.html', context)
+
+
+
+def process_payment(name, email, amount, phone):
+    auth_token = os.getenv('FLUTTERWAVE_SECRET_KEY')
+    hed = {'Authorization': 'Bearer ' + auth_token}
+    data = {
+        "tx_ref": ''+str(math.floor(1000000 + random.random()*9000000)),
+        "amount": amount,
+        "currency": "UGX",
+        "redirect_url": "https://localhost:8000/",
+        "payment_options": " ",
+        "meta": {
+            "consumer_id": 23,
+            "consumer_mac": "92a3-912ba-1192a"
+        },
+        "customer": {
+            "email": email,
+            "phonenumber": phone,
+            "name": name
+        },
+        "customizations": {
+            "title": "My Restaurant",
+            "description": "This is my restaurant"
+        }
+    }
+    url = ' https://api.flutterwave.com/v3/payments'
+    response = requests.post(url, json=data, headers=hed)
+    response = response.json()
+    link = response['data']['link']
+    return link
+
+
+@require_http_methods(['GET', 'POST'])
+def payment_response(request):
+    status = request.GET.get('status', None)
+    tx_ref = request.GET.get('tx_ref', None)
+    print(status)
+    print(tx_ref)
+    return render(request, 'landing/success.html')
 
 
 
