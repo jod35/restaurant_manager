@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
@@ -90,6 +91,14 @@ class OrderItemUpdateView(UpdateView):
     template_name = "order/order_item_update.html"
     fields = ['quantity']
     context_object_name = 'selected_item'
+    
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+
+        previous_url = self.request.META.get("HTTP_REFERER")
+
+        context['previous_url'] = previous_url
+        return super().get_context_data(**kwargs)
 
 
 def generate_report(request):
