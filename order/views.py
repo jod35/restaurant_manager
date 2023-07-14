@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-
 from menu.models import MenuItem
 from .models import Order, OrderItem
 from django.shortcuts import render
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 from django.db.models import Sum
+from django.views.generic import UpdateView
+
 
 @login_required
 def create_new_order(request):
@@ -70,9 +71,7 @@ def order_items(request):
 def order_item_detail(request,item_id):
     order = get_object_or_404(Order,id=item_id)
 
-    total_price = order.items.all().aggregate(total_price=Sum('item__price'))
-
-    return render(request,'order/order_details.html',{'order':order,'total_price':total_price['total_price']})
+    return render(request,'order/order_details.html',{'order':order,'total_price':order.cart_total()})
 
 @login_required
 def delete_item_from_order(request,order_id,item_id):
@@ -82,6 +81,15 @@ def delete_item_from_order(request,order_id,item_id):
     order.items.remove(item)
 
     return redirect(reverse('order_detail',kwargs={'item_id':item.id}))
+
+
+
+
+class OrderItemUpdateView(UpdateView):
+    model = OrderItem
+    template_name = "order/order_item_update.html"
+    fields = ['quantity']
+    context_object_name = 'selected_item'
 
 
 def generate_report(request):
