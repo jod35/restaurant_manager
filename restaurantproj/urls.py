@@ -28,8 +28,6 @@ urlpatterns = [
     path('', homepage, name='homepage'),
     path('orders/', include("order.urls"), name=''),
     path('menu/', include("menu.urls"), name=''),
-    path('delivery/', include("delivery.urls"), name=''),
-    path('reservations/', include("reservation.urls"), name=''),
     path('auth/',include('auth.urls'))
   
 
