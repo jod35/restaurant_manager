@@ -67,11 +67,16 @@
             Cart <span class="badge badge-light">{{current_order.items.count}}</span>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            {% if current_order %}
+            <a class="dropdown-item" href="{% url 'delivery' %}">View</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="{% url 'reservation' %}" id="navbarDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Cart <span class="badge badge-light">{{current_order.items.count}}</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="{% url 'order_detail' item_id=current_order.id%}">View</a>
-            {% else %}
-            <a class="dropdown-item disabled" href="#">View</a>
-            {% endif %}
           </div>
         </li>
         <li class="nav-item">

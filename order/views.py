@@ -84,6 +84,15 @@ def delete_item_from_order(request,order_id,item_id):
     return redirect(reverse('order_detail',kwargs={'item_id':item.id}))
 
 
+@login_required
+def delete_order(request,order_id):
+    order = get_object_or_404(Order,id=order_id)
+
+    order.delete()
+
+    return redirect(reverse('order_items'))
+
+
 def generate_report(request):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="order_report.pdf"'
