@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-
+    <h1>My Orders</h1>
+    <p>All Your orders are here 👇👇👇👇👇</p>
 {% if orders %}
 <table class="table table-striped table-responsive">
     <thead>
@@ -11,6 +12,7 @@
             <th scope="col">Items</th>
             <th scope="col">Confirmed</th>
             <th scope="col">Delivery Status</th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -21,8 +23,23 @@
             <td><a href="{% url 'order_detail' item_id=order.id%}">{{first_item.item.name}} at {{first_item.item.price}} ... </a></td>   
             <td>{{ order.created_at }}</td>
             <td>{{order.items.count}}</td>
-            <td>{{order.confirmed}}</td>
-            <td>{{order.delivered}}</td>
+            <td>
+                
+                {% if order.confirmed == True%}
+                ✅
+                {% else %}
+                ❌
+                {% endif %}
+                    
+            </td>
+            <td>
+                {% if order.delivered == True%}
+                ✅
+                {% else %}
+                ❌
+                {% endif %}
+            </td>
+            <td><a href="{% url 'delete_order' order_id=order.id%}" class="text-danger">delete</a></td>
         </tr>
         {% endfor %}
             
