@@ -9,4 +9,5 @@ urlpatterns = [
     path('delete_item/<int:item_id>/<int:order_id>/',views.delete_item_from_order,name='delete_order_item'),
     path('update_order_item/<pk>/',views.OrderItemUpdateView.as_view(), name='update_order_item'),
     path('order_checkout/<int:order_id>/',views.order_checkout, name='order_checkout'),
+    path('delete_order/<int:order_id>/',views.delete_order,name='delete_order')
 ]

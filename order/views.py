@@ -27,6 +27,9 @@ def create_new_order(request):
         new_order = Order.objects.create(user=user)
 
         new_order.save()
+
+        request.session['cart'] = new_order.id
+
         return redirect(reverse('menu_items'))
     
     return redirect(reverse('homepage'))
@@ -49,13 +52,17 @@ def add_order_item(request, item_id):
 
             order_item.save()
 
-            order = Order.objects.filter(user=request.user).latest('created_at')
+            print(request.user)
+
+            order_id = request.session['cart']
+
+            order = Order.objects.get(id=order_id)
+
+            print(order)
 
             order.items.add(order_item)
 
             order.save()
-
-            print("Item added")
 
             messages.success(request,"Item added successfully")
 
@@ -69,11 +76,11 @@ def add_order_item(request, item_id):
 
 @login_required
 def order_items(request):
-    orders = Order.objects.all()
+    orders = Order.objects.filter(user=request.user).all()
    
-    first_item = orders.first().items.first()
+    # first_item = orders.first().items.first()
 
-    return render(request, 'order/order_items.html',{'orders':orders,'first_item':first_item})
+    return render(request, 'order/order_items.html',{'orders':orders})
 
 
 @login_required
@@ -91,7 +98,7 @@ def delete_item_from_order(request,order_id,item_id):
 
     return redirect(reverse('order_detail',kwargs={'item_id':item.id}))
 
-
+@login_required
 def order_checkout(request, order_id):
     order = get_object_or_404(Order, id= order_id)
     if request.method == 'POST':
@@ -101,6 +108,8 @@ def order_checkout(request, order_id):
         phone = request.POST['phone']
 
         print(email,amount,phone)
+
+        request.session['cart'] = {'id':1}
         return redirect(str(process_payment(name, email, amount, phone)))
 
     context = {'order': order}
@@ -145,6 +154,15 @@ def payment_response(request):
     print(status)
     print(tx_ref)
     return render(request, 'landing/success.html')
+
+
+@login_required
+def delete_order(request,order_id):
+    order = get_object_or_404(Order,id=order_id)
+
+    order.delete()
+
+    return redirect(reverse('order_items'))
 
 
 

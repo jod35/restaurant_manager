@@ -307,4 +307,4 @@ JAZZMIN_SETTINGS = {
 CRISPY_TEMPLATE_PACK="bootstrap4"
 
 LOGIN_URL = '/auth/login'
-LOGIN_REDIRECT_URL = '/auth/login'
+LOGIN_REDIRECT_URL = '/'
