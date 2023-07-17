@@ -19,5 +19,5 @@ class MenuItem(models.Model):
         return f"{self.name} @ {self.price}"
 
     def formatted_price(self):
-        return '$' + str(self.price)
+        return f"{self.price:,}"
 

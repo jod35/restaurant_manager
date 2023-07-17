@@ -34,11 +34,14 @@
                     </div>
                   </div>
                 </td>
-                <td class="text-right font-weight-semibold align-middle p-4">UGX {{item.item.price}}</td>
+                <td class="text-right font-weight-semibold align-middle p-4">UGX {{item.item.formatted_price}}</td>
                 <td class="align-middle p-4"><input type="text" class="form-control text-center" value="{{item.quantity}}"></td>
                 <td class="text-right font-weight-semibold align-middle p-4">{{item.line_total}}</td>
-                <td class="text-center align-middle px-0"><a href="{% url 'delete_order_item' order_id=order.id item_id=item.id%}" class="shop-tooltip close float-none text-danger" title="" 
-                  data-original-title="Remove">×</a></td>
+                <td class="text-center align-middle px-0"><a href="{% url 'update_order_item' pk=item.id%}" class="text-info" title="" 
+                  data-original-title="Remove">Update</a></td>
+
+                  <td class="text-center align-middle px-0"><a href="{% url 'delete_order_item' order_id=order.id item_id=item.id%}" class="text-danger" title="" 
+                    data-original-title="Remove">delete</a></td>
               </tr>
               {% endfor %}
                 
@@ -55,14 +58,14 @@
           <div class="d-flex">
             <div class="text-right mt-4">
               <label class="text-muted font-weight-normal m-0">Total price</label>
-              <div class="text-large"><strong>{{ total_price }}</strong></div>
+              <div class="text-large"><strong>UGX {{ total_price }}</strong></div>
             </div>
           </div>
         </div>
     
         <div class="float-right">
           <a href="{% url 'menu_items' %}" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3">Back to Menu</a>
-          <button type="button" class="btn btn-lg btn-primary mt-2">Checkout</button>
+          <a href="{% url 'order_checkout' order_id=order.id%}" class="btn btn-lg btn-primary mt-2">Checkout</a>
         </div>
     
       </div>
