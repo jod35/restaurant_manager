@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card">
+          <img src="{{ selected_item.item.image.url }}" class="card-img-top img-fluid" alt="{{selected_item.name}}">
+          <div class="card-body">
+            <h5 class="card-title">{{ selected_item.item.name }}</h5>
+            <p class="card-text">Price: {{ selected_item.item.formatted_price }}</p>
+            <form action="" method="post">
+              <!-- Form fields go here -->
+              {% csrf_token %}
+               {{form|crispy}}
+               <a href="{{previous_url}}" class="btn btn-info">Back</a>
+              <button type="submit" class="btn btn-primary">Place Order</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+    

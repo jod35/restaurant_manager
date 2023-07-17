@@ -1,14 +1,24 @@
+from typing import Any, Dict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-
 from menu.models import MenuItem
 from .models import Order, OrderItem
 from django.shortcuts import render
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 from django.db.models import Sum
+from django.views.generic import UpdateView
+from django.views.decorators.http import require_http_methods
+from dotenv import load_dotenv
+import requests
+import random
+import math
+import os
+
+
+load_dotenv()
 
 @login_required
 def create_new_order(request):
@@ -70,9 +80,7 @@ def order_items(request):
 def order_item_detail(request,item_id):
     order = get_object_or_404(Order,id=item_id)
 
-    total_price = order.items.all().aggregate(total_price=Sum('item__price'))
-
-    return render(request,'order/order_details.html',{'order':order,'total_price':total_price['total_price']})
+    return render(request,'order/order_details.html',{'order':order,'total_price':order.cart_total()})
 
 @login_required
 def delete_item_from_order(request,order_id,item_id):
@@ -84,13 +92,75 @@ def delete_item_from_order(request,order_id,item_id):
     return redirect(reverse('order_detail',kwargs={'item_id':item.id}))
 
 
-@login_required
-def delete_order(request,order_id):
-    order = get_object_or_404(Order,id=order_id)
+def order_checkout(request, order_id):
+    order = get_object_or_404(Order, id= order_id)
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        amount = order.grand_total()
+        phone = request.POST['phone']
 
-    order.delete()
+        print(email,amount,phone)
+        return redirect(str(process_payment(name, email, amount, phone)))
 
-    return redirect(reverse('order_items'))
+    context = {'order': order}
+    return render(request, 'order/order_checkout.html', context)
+
+
+
+def process_payment(name, email, amount, phone):
+    auth_token = os.getenv('FLUTTERWAVE_SECRET_KEY')
+    hed = {'Authorization': 'Bearer ' + auth_token}
+    data = {
+        "tx_ref": ''+str(math.floor(1000000 + random.random()*9000000)),
+        "amount": amount,
+        "currency": "UGX",
+        "redirect_url": "https://localhost:8000/",
+        "payment_options": " ",
+        "meta": {
+            "consumer_id": 23,
+            "consumer_mac": "92a3-912ba-1192a"
+        },
+        "customer": {
+            "email": email,
+            "phonenumber": phone,
+            "name": name
+        },
+        "customizations": {
+            "title": "My Restaurant",
+            "description": "This is my restaurant"
+        }
+    }
+    url = ' https://api.flutterwave.com/v3/payments'
+    response = requests.post(url, json=data, headers=hed)
+    response = response.json()
+    link = response['data']['link']
+    return link
+
+
+@require_http_methods(['GET', 'POST'])
+def payment_response(request):
+    status = request.GET.get('status', None)
+    tx_ref = request.GET.get('tx_ref', None)
+    print(status)
+    print(tx_ref)
+    return render(request, 'landing/success.html')
+
+
+
+class OrderItemUpdateView(UpdateView):
+    model = OrderItem
+    template_name = "order/order_item_update.html"
+    fields = ['quantity']
+    context_object_name = 'selected_item'
+    
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+
+        previous_url = self.request.META.get("HTTP_REFERER")
+
+        context['previous_url'] = previous_url
+        return super().get_context_data(**kwargs)
 
 
 def generate_report(request):
