@@ -10,3 +10,4 @@ class OrderItemsTest(TestCase):
 
         self.assertEqual(response.status_code,302)
         self.assertRedirects(response,'/auth/login/')
+        self.assertTemplateUsed(response,)

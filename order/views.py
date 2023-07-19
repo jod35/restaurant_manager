@@ -140,7 +140,7 @@ def process_payment(name, email, amount, phone):
             "description": "This is my restaurant"
         }
     }
-    url = ' https://api.flutterwave.com/v3/payments'
+    url = 'https://api.flutterwave.com/v3/payments'
     response = requests.post(url, json=data, headers=hed)
     response = response.json()
     link = response['data']['link']
@@ -171,6 +171,7 @@ class OrderItemUpdateView(UpdateView):
     template_name = "order/order_item_update.html"
     fields = ['quantity']
     context_object_name = 'selected_item'
+    success_url = '/orders/order_items/'
     
     def get_context_data(self, **kwargs: Any):
         context = super().get_context_data(**kwargs)

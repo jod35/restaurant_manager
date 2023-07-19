@@ -49,5 +49,9 @@ class Order(models.Model):
         for item in self.items.all():
             total_price += (item.quantity * item.item.price)
         return total_price
+    
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('', kwargs={'pk': self.pk})
 
     
