@@ -27,3 +27,4 @@ sqlparse
 typing-extensions
 urllib3
 zipp
+whitenoise

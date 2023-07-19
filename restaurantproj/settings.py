@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'order',
 
     'crispy_forms',
-    'crispy_bootstrap4'
+    'crispy_bootstrap4',
+    
 ]
 
 MIDDLEWARE = [
@@ -57,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
 ]
 
 ROOT_URLCONF = 'restaurantproj.urls'
@@ -131,7 +134,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = (BASE_DIR / 'static',)
+# STATICFILES_DIRS = (BASE_DIR / 'static',)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
@@ -308,3 +311,5 @@ CRISPY_TEMPLATE_PACK="bootstrap4"
 
 LOGIN_URL = '/auth/login'
 LOGIN_REDIRECT_URL = '/'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = BASE_DIR / "staticfiles"
