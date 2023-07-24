@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 import pymysql
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'crispy_bootstrap4',
+    'cloudinary'
     
 ]
 
@@ -80,6 +84,13 @@ TEMPLATES = [
         },
     },
 ]
+
+
+cloudinary.config( 
+  cloud_name = "nowaretech", 
+  api_key = "534868151689893", 
+  api_secret = "Dm3qIvY4BRbEBAM4y7Ne8MrUwLQ" 
+)
 
 WSGI_APPLICATION = 'restaurantproj.wsgi.application'
 
