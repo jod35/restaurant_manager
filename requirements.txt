@@ -1,7 +1,7 @@
 asgiref
 certifi
 charset-normalizer
-cloudinary
+cloudinary==1.33.0
 contourpy
 crispy-bootstrap4
 cycler

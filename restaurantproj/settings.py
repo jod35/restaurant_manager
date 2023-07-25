@@ -145,8 +145,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# STATICFILES_DIRS = (BASE_DIR / 'static',)
-# STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = (BASE_DIR / 'static',)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # Default primary key field type
@@ -324,7 +324,7 @@ CRISPY_TEMPLATE_PACK="bootstrap4"
 LOGIN_URL = '/auth/login'
 LOGIN_REDIRECT_URL = '/'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
