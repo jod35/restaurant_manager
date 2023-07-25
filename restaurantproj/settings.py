@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 import pymysql
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +32,7 @@ SECRET_KEY = 'django-insecure-9jv=)wjyjnawy!#_!khctsu-##**x!(mjmvs18sbyi6cv!n6ip
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -44,10 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'menu',
     'order',
-    'delivery',
-    'reservation',
+
     'crispy_forms',
-    'crispy_bootstrap4'
+    'crispy_bootstrap4',
+    'cloudinary'
+    
 ]
 
 MIDDLEWARE = [
@@ -58,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
 ]
 
 ROOT_URLCONF = 'restaurantproj.urls'
@@ -79,6 +85,13 @@ TEMPLATES = [
     },
 ]
 
+
+cloudinary.config( 
+  cloud_name = "nowaretech", 
+  api_key = "534868151689893", 
+  api_secret = "Dm3qIvY4BRbEBAM4y7Ne8MrUwLQ" 
+)
+
 WSGI_APPLICATION = 'restaurantproj.wsgi.application'
 
 
@@ -88,7 +101,7 @@ WSGI_APPLICATION = 'restaurantproj.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'restdb',
+        'NAME': 'restdb.db',
         # 'USER':'jod35',
         # 'PASSWORD':'nathanoj35',
         # 'HOST':'localhost'
@@ -132,8 +145,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = (BASE_DIR / 'static',)
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATICFILES_DIRS = (BASE_DIR / 'static',)
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # Default primary key field type
@@ -305,7 +318,15 @@ JAZZMIN_SETTINGS = {
 #      },
 #  }
 
+import os
 CRISPY_TEMPLATE_PACK="bootstrap4"
 
 LOGIN_URL = '/auth/login'
-LOGIN_REDIRECT_URL = '/auth/login'
+LOGIN_REDIRECT_URL = '/'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+

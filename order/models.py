@@ -16,7 +16,10 @@ class OrderItem(models.Model):
         return f"{self.item.name} at {self.created_at}"
     
     def line_total(self):
-        return self.item.price * self.quantity
+        line_total = self.item.price * self.quantity
+        return f"{line_total:,}"
+    
+    
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -29,11 +32,26 @@ class Order(models.Model):
     def __str__(self) -> str:
         return F"Order {self.user}"
     
+
+    def cart_total(self):
+        total_price = 0
+        for item in self.items.all():
+            total_price += (item.quantity * item.item.price)
+
+        return f'{total_price:,}'
+    
     class Meta:
         ordering = ('-created_at',)
 
     def grand_total(self):
-        total = 0 
-        
+
+        total_price = 0
+        for item in self.items.all():
+            total_price += (item.quantity * item.item.price)
+        return total_price
+    
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('', kwargs={'pk': self.pk})
 
     

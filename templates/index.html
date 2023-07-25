@@ -8,11 +8,11 @@
       {% endfor %}
         
       <div class="hero-text">
-        <h1>Welcome to Our Restaurant</h1>
-        <p>Discover the finest culinary delights</p>
+        <h1 class="mt-4">Welcome to Our Restaurant</h1>
+        <p>Discover our Finest Dishes</p>
         <form action="{% url 'create_new_order' %}" method="post">
            {% csrf_token %}
-          <button type="submit" class="btn btn-primary">Place Your Order</button>
+          <button type="submit" class="btn btn-primary">View Menu</button>
         </form>
       </div>
     </div>

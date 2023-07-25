@@ -1,0 +1,102 @@
+{% extends "admin/change_list.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+{% if analytics %}
+<div>
+    <h2>Analytics</h2>
+    <div>
+        <canvas id="most-ordered-products-graph"></canvas>
+    </div>
+    <div>
+        <canvas id="monthly-order-totals-graph"></canvas>
+    </div>
+</div>
+<script>
+    var analyticsData = JSON.parse(atob("{{ analytics }}"));
+
+    // Render Most Ordered Products graph
+    var mostOrderedProductsCtx = document.getElementById('most-ordered-products-graph').getContext('2d');
+    new Chart(mostOrderedProductsCtx, {
+        type: 'bar',
+        data: {
+            labels: analyticsData.most_ordered_products.labels,
+            datasets: [{
+                label: 'Total Ordered',
+                data: analyticsData.most_ordered_products.values,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Product'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Total Ordered'
+                    }
+                }
+            }
+        }
+    });
+
+    // Render Monthly Order Totals graph
+    var monthlyOrderTotalsCtx = document.getElementById('monthly-order-totals-graph').getContext('2d');
+    new Chart(monthlyOrderTotalsCtx, {
+        type: 'line',
+        data: {
+            labels: analyticsData.monthly_order_totals.labels,
+            datasets: [{
+                label: 'Total Amount',
+                data: analyticsData.monthly_order_totals.values,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Total Amount'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}
