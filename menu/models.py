@@ -11,7 +11,7 @@ CATEGORIES = (
 class MenuItem(models.Model):
     name = models.CharField(max_length=100)
     price = models.IntegerField()
-    image = CloudinaryField('image')
+    image = models.ImageField(upload_to='menu_items/',default='default.jpg')
     category = models.CharField(max_length=255,choices=CATEGORIES)
     description = models.TextField()
 
